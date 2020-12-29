@@ -15,15 +15,13 @@ public class UnaryOpTerm implements JackTerm {
     public static final String[] UNARY_OPS = new String[] {"~", "-"};
     public static final Set<String> UNARY_OP_SET = new HashSet<>(Arrays.asList(UNARY_OPS));
 
-    private Symbol unaryOp;
-    private JackTerm term;
+    private final Symbol unaryOp;
+    private final JackTerm term;
 
     public UnaryOpTerm(Symbol unaryOp, JackTerm currTerm) {
         this.unaryOp = unaryOp;
         this.term = currTerm;
     }
-
-
 
     @Override
     public String toXmlTerm() {

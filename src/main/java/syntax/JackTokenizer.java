@@ -2,7 +2,8 @@ package syntax;
 
 import syntax.token.*;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by muscaestar on 12/26/20
@@ -27,7 +28,7 @@ public class JackTokenizer {
         // block comment
         readLine = readLine.trim();
         if (readLine.startsWith("/*") && readLine.endsWith("*/")) return;
-        if (readLine.startsWith("/**") || readLine.startsWith("*") || readLine.startsWith("*/")) return;;
+        if (readLine.startsWith("/**") || readLine.startsWith("*") || readLine.startsWith("*/")) return;
         // in-line comment
         int idxCom = readLine.indexOf("//");
         if (idxCom > -1) {

@@ -15,7 +15,7 @@ public class KeywordConstant implements JackTerm {
     public static final String[] KEYWORD_CONSTS = new String[] {"true", "false", "null", "this"};
     public static final Set<String> KEYWORD_CONST_SET = new HashSet<>(Arrays.asList(KEYWORD_CONSTS));
 
-    private Keyword keyword;
+    private final Keyword keyword;
 
     public KeywordConstant(Keyword keyword) {
         this.keyword = keyword;

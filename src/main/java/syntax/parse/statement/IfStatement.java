@@ -5,7 +5,9 @@ import syntax.token.JackToken;
 import syntax.token.Keyword;
 import syntax.token.Symbol;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by muscaestar on 12/28/20
@@ -14,8 +16,8 @@ import java.util.*;
  */
 public class IfStatement implements JackStatement {
     private JackExpression condition;
-    private List<JackStatement> trueStatements = new LinkedList<>();
-    private List<JackStatement> elseStatements = new LinkedList<>();
+    private final List<JackStatement> trueStatements = new LinkedList<>();
+    private final List<JackStatement> elseStatements = new LinkedList<>();
 
     @Override
     public JackToken compileStatement(ListIterator<JackToken> iterator) {

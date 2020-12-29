@@ -4,7 +4,6 @@ import syntax.parse.ParseElement;
 import syntax.token.JackToken;
 import syntax.token.Symbol;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -19,8 +18,7 @@ public class JackExpression implements JackTerm, ParseElement {
     private List<OpTerm> opTerms = new LinkedList<>();
 
     public void compileExpression(ListIterator<JackToken> iterator, String symbolOfEnd) {
-        JackTerm currTerm = JackTerm.compileTerm(iterator, symbolOfEnd);
-        this.term = currTerm;
+        this.term = JackTerm.compileTerm(iterator, symbolOfEnd);
         JackToken currToken = iterator.next();
         while (OpTerm.OP_SET.contains(currToken.getTkv())) {
             OpTerm opTerm = new OpTerm();

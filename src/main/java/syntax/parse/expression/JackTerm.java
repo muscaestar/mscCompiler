@@ -1,6 +1,5 @@
 package syntax.parse.expression;
 
-import syntax.parse.ParseElement;
 import syntax.token.*;
 
 import java.util.ListIterator;
@@ -19,8 +18,7 @@ public interface JackTerm {
         } else if (UnaryOpTerm.UNARY_OP_SET.contains(currToken.getTkv())) {
             Symbol unaryOp = (Symbol) currToken;
             JackTerm currTerm = compileTerm(iterator, symbolOfEnd);
-            UnaryOpTerm unaryOpTerm = new UnaryOpTerm(unaryOp, currTerm);
-            return unaryOpTerm;
+            return new UnaryOpTerm(unaryOp, currTerm);
         } else if (currToken.getTkv().equals("(")) {
             JackExpression expression = new JackExpression();
             expression.compileExpression(iterator, ")");

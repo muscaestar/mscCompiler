@@ -4,7 +4,10 @@ import syntax.token.Identifier;
 import syntax.token.JackToken;
 import syntax.token.Symbol;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
 
 /**
  * Created by muscaestar on 12/28/20
@@ -13,7 +16,7 @@ import java.util.*;
  */
 public class SubroutineCall implements JackTerm {
     private Identifier callee;
-    private List<JackExpression> args = new LinkedList<>();
+    private final List<JackExpression> args = new LinkedList<>();
     private Identifier calleeParent;
 
     public void compileSubroutineCall(ListIterator<JackToken> iterator) {

@@ -6,7 +6,6 @@ import syntax.token.JackToken;
 import syntax.token.Keyword;
 import syntax.token.Symbol;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -17,9 +16,9 @@ import java.util.ListIterator;
  * @author muscaestar
  */
 public class SubroutineBody implements ParseElement {
-    private List<Identifier> localVars = new LinkedList<>();
+    private final List<Identifier> localVars = new LinkedList<>();
 
-    private List<JackStatement> statements = new LinkedList<>();
+    private final List<JackStatement> statements = new LinkedList<>();
 
     public void compileSubrBody(ListIterator<JackToken> iterator) {
         iterator.next(); // {
@@ -41,8 +40,6 @@ public class SubroutineBody implements ParseElement {
         }
 
         compileStatements(iterator, token);
-//        JackToken tmp = iterator.next(); // }
-
     }
 
     private void compileStatements(ListIterator<JackToken> iterator, JackToken currToken) {
@@ -60,7 +57,6 @@ public class SubroutineBody implements ParseElement {
             }
             statements.add(s);
             currToken = s.compileStatement(iterator);
-//            currToken = iterator.next();
         }
     }
 

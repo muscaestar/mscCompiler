@@ -1,6 +1,5 @@
 import syntax.CompileEngine;
 import syntax.JackTokenizer;
-import syntax.token.JackToken;
 
 import java.io.*;
 import java.util.Arrays;

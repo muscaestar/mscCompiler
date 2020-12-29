@@ -5,7 +5,6 @@ import syntax.token.Identifier;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 

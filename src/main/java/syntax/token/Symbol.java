@@ -37,14 +37,15 @@ public class Symbol extends JackToken {
     @Override
     public String toXml() {
         String xmlChar;
-        if (tkv.equals("<")) {
-            xmlChar = "&lt;";
-        } else if (tkv.equals(">")) {
-            xmlChar = "&gt;";
-        } else if (tkv.equals("&")) {
-            xmlChar = "&amp;";
-        } else {
-            xmlChar = tkv;
+        switch (tkv) {
+            case "<":
+                xmlChar = "&lt;";break;
+            case ">":
+                xmlChar = "&gt;";break;
+            case "&":
+                xmlChar = "&amp;";break;
+            default:
+                xmlChar = tkv;break;
         }
         return String.format("<symbol> %s </symbol>", xmlChar);
     }

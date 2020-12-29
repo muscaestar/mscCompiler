@@ -16,11 +16,11 @@ public class Subroutine implements ParseElement {
     public static final String[] SUBROUTINE_KEYWORD = new String[] {"constructor", "method", "function"};
     public static final Set<String> SUBROUTINE_KEYWORD_SET = new HashSet<>(Arrays.asList(SUBROUTINE_KEYWORD));
 
-    private Keyword subrAttr;
+    private final Keyword subrAttr;
 
     private Identifier subrName;
 
-    private List<Identifier> paramList = new LinkedList<>();
+    private final List<Identifier> paramList = new LinkedList<>();
 
     private SubroutineBody subrBody;
 
