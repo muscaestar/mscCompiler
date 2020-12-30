@@ -1,5 +1,6 @@
 package syntax.parse;
 
+import codegen.table.VarTable;
 import syntax.token.Identifier;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
@@ -37,10 +38,12 @@ public class Subroutine implements ParseElement {
         iterator.next(); // (
 
         compileParamList(iterator); // )
-        subrBody = new SubroutineBody();
+        subrBody = new SubroutineBody(subrName);
         subrBody.compileSubrBody(iterator);
 
-
+        // recycle local level var table
+        VarTable varTable = VarTable.getInstance();
+        varTable.recycleLocalLvTable();
     }
 
     private void compileParamList(ListIterator<JackToken> iterator) {
@@ -56,6 +59,13 @@ public class Subroutine implements ParseElement {
             token = iterator.next();
         }
         // )
+        registerInVarTable();
+    }
+
+    private void registerInVarTable() {
+        // add argument to var table
+        VarTable varTable = VarTable.getInstance();
+        paramList.forEach(i -> varTable.add(i.getTkv(), i.getType().getName(), "argument"));
     }
 
     @Override

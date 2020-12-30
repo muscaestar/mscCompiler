@@ -1,5 +1,6 @@
 package syntax.parse;
 
+import codegen.table.VarTable;
 import syntax.parse.statement.*;
 import syntax.token.Identifier;
 import syntax.token.JackToken;
@@ -16,9 +17,15 @@ import java.util.ListIterator;
  * @author muscaestar
  */
 public class SubroutineBody implements ParseElement {
+    private final Identifier subrName;
+
     private final List<Identifier> localVars = new LinkedList<>();
 
     private final List<JackStatement> statements = new LinkedList<>();
+
+    public SubroutineBody(Identifier subrName) {
+        this.subrName = subrName;
+    }
 
     public void compileSubrBody(ListIterator<JackToken> iterator) {
         iterator.next(); // {
@@ -38,8 +45,18 @@ public class SubroutineBody implements ParseElement {
             }
             token = iterator.next();
         }
+        registerInVarTable();
 
         compileStatements(iterator, token);
+    }
+
+    private void registerInVarTable() {
+        // add local var to var table
+        VarTable varTable = VarTable.getInstance();
+        localVars.forEach(i -> varTable.add(i.getTkv(), i.getType().getName(), "local"));
+        // print arg+local = local symbol table
+        System.out.println("// " + subrName.getTkv());
+        varTable.printLocalLvTable();
     }
 
     private void compileStatements(ListIterator<JackToken> iterator, JackToken currToken) {

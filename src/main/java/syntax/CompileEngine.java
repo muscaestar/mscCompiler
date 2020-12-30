@@ -1,5 +1,6 @@
 package syntax;
 
+import codegen.table.VarTable;
 import syntax.parse.JackClass;
 import syntax.token.Identifier;
 import syntax.token.JackToken;
@@ -16,9 +17,11 @@ import java.util.ListIterator;
 public class CompileEngine {
     List<JackToken> tokens;
     JackClass jackClass;
+    VarTable varTable;
 
     public CompileEngine(List<JackToken> tokens) {
         this.tokens = tokens;
+        this.varTable = VarTable.getInstance();
     }
 
     public JackClass getJackClass() {
@@ -41,5 +44,11 @@ public class CompileEngine {
         iterator.next(); // {
         Keyword currKeyword = jackClass.compileClassVars(iterator);
         jackClass.compileSubroutines(iterator, currKeyword);
+    }
+
+
+    public void recycleVarTable() {
+        varTable.recycleLocalLvTable();
+        varTable.recycleClassLvTable();
     }
 }

@@ -1,5 +1,6 @@
 package syntax.parse;
 
+import codegen.table.VarTable;
 import syntax.token.Identifier;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
@@ -61,7 +62,22 @@ public class JackClass implements ParseElement {
             classVar.compileAVarName(iterator);
             token = iterator.next();
         }
+        registerInVarTable();
         return (Keyword) token;
+    }
+
+    private void registerInVarTable() {
+        // add class level var to var table
+        VarTable varTable = VarTable.getInstance();
+        for (ClassVar classVar : classVars) {
+            String kind = classVar.getAttr().getTkv();
+            for (Identifier var : classVar.getVarNames()) {
+                varTable.add(var.getTkv(), var.getType().getName(), kind);
+            }
+        }
+        // print class level symbol table
+        System.out.println("// " + className.getTkv());
+        varTable.printClassLvTable();
     }
 
     public void compileSubroutines(ListIterator<JackToken> iterator, JackToken currKeyword) {

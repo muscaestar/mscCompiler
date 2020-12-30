@@ -47,6 +47,9 @@ public class JackCompiler {
 //            writeTokensToOut(tokenizer, fos);
             writeClassToOut(engine, fos);
 
+
+
+            engine.recycleVarTable();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
