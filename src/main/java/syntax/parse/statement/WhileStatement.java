@@ -1,5 +1,6 @@
 package syntax.parse.statement;
 
+import codegen.CodeGenUtil;
 import syntax.parse.expression.JackExpression;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
@@ -20,9 +21,16 @@ public class WhileStatement implements JackStatement {
 
     @Override
     public JackToken compileStatement(ListIterator<JackToken> iterator) {
+        int whileCnt = CodeGenUtil.getWhileLabelCnt();
+        CodeGenUtil.genComment("while " + whileCnt);
+        CodeGenUtil.whileLabelPlusOne();
         iterator.next(); // (
         condition = new JackExpression();
         condition.compileExpression(iterator, ")");
+        CodeGenUtil.genLabel("WHILE_EXP" + whileCnt);
+        CodeGenUtil.genExpr(condition);
+        CodeGenUtil.genUnaryOp("~");
+        CodeGenUtil.genIfGoto("WHILE_END" + whileCnt);
         iterator.next(); // {
         JackToken currToken = iterator.next();
         while (JackStatement.STATE_KEYWORDS_SET.contains(currToken.getTkv())) {
@@ -39,6 +47,8 @@ public class WhileStatement implements JackStatement {
             statements.add(s);
             currToken = s.compileStatement(iterator);
         }
+        CodeGenUtil.genGoto("WHILE_EXP" + whileCnt);
+        CodeGenUtil.genLabel("WHILE_END" + whileCnt);
         return iterator.next();
     }
 

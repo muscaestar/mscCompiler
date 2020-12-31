@@ -32,4 +32,12 @@ public class UnaryOpTerm implements JackTerm {
         sb.append("</term>");
         return sb.toString();
     }
+
+    public Symbol getUnaryOp() {
+        return unaryOp;
+    }
+
+    public JackTerm getTerm() {
+        return term;
+    }
 }

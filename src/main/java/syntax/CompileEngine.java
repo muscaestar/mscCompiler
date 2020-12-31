@@ -1,11 +1,13 @@
 package syntax;
 
+import codegen.CodeGenUtil;
 import codegen.table.VarTable;
 import syntax.parse.JackClass;
 import syntax.token.Identifier;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
 
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -28,7 +30,7 @@ public class CompileEngine {
         return jackClass;
     }
 
-    public void compile() {
+    private void compile() {
         ListIterator<JackToken> iterator = tokens.listIterator();
         while (iterator.hasNext()) {
             JackToken token = iterator.next();
@@ -38,9 +40,16 @@ public class CompileEngine {
         }
     }
 
+    public void compile(FileOutputStream fos) {
+        CodeGenUtil.initCodeGen(fos);
+        compile();
+        CodeGenUtil.recycleCodeGenWriter();
+    }
+
     private void compileClass(ListIterator<JackToken> iterator) {
         jackClass = new JackClass();
         jackClass.setClassName((Identifier) iterator.next());
+        CodeGenUtil.setWriterClassName(jackClass.getClassName());
         iterator.next(); // {
         Keyword currKeyword = jackClass.compileClassVars(iterator);
         jackClass.compileSubroutines(iterator, currKeyword);

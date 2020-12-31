@@ -1,5 +1,6 @@
 package syntax.parse.statement;
 
+import codegen.CodeGenUtil;
 import syntax.parse.expression.JackExpression;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
@@ -24,6 +25,13 @@ public class ReturnStatement implements JackStatement {
             iterator.previous();
             expression.compileExpression(iterator, ";");
         }
+        CodeGenUtil.genComment("return");
+        if (expression == null) {
+            CodeGenUtil.genPush("constant", 0);
+        } else {
+            CodeGenUtil.genExpr(expression);
+        }
+        CodeGenUtil.genReturn();
         return iterator.next();
     }
 

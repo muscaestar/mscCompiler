@@ -62,6 +62,10 @@ public class SymbolTable {
         table.clear();
     }
 
+    public int numOfEntry(String kind) {
+        return Math.toIntExact(table.values().stream().filter(e -> e.kind.equals(kind)).count());
+    }
+
     private class SymbolEntry {
         String name;
         String type;

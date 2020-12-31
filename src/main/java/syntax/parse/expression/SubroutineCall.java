@@ -1,5 +1,7 @@
 package syntax.parse.expression;
 
+import codegen.CodeGenUtil;
+import codegen.table.VarTable;
 import syntax.token.Identifier;
 import syntax.token.JackToken;
 import syntax.token.Symbol;
@@ -23,6 +25,15 @@ public class SubroutineCall implements JackTerm {
         Identifier name = (Identifier) iterator.next();
         Symbol symbol = (Symbol) iterator.next();
         compileSubroutineCall(iterator, name, symbol);
+        if (calleeParent == null ) {
+            CodeGenUtil.genPush("pointer", 0);
+        } else if (VarTable.getInstance().exist(calleeParent.getTkv())) {
+            CodeGenUtil.genPush(calleeParent);
+        }
+        for (JackExpression expr : args) {
+            CodeGenUtil.genExpr(expr);
+        }
+        CodeGenUtil.genCall(calleeParent, callee, args.size());
     }
 
     public void compileSubroutineCall(ListIterator<JackToken> iterator, Identifier anIdentifier, Symbol nextSymbol) {
@@ -68,4 +79,15 @@ public class SubroutineCall implements JackTerm {
         return sb.toString();
     }
 
+    public Identifier getCallee() {
+        return callee;
+    }
+
+    public List<JackExpression> getArgs() {
+        return args;
+    }
+
+    public Identifier getCalleeParent() {
+        return calleeParent;
+    }
 }

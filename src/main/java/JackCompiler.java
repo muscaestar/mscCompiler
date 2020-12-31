@@ -20,16 +20,38 @@ public class JackCompiler {
         String targetPath = args[0];
         File inputFile = new File(targetPath);
         if (inputFile.isFile()) {
-            compileJackToTokens(inputFile);
+//            compileJackToTokens(inputFile);
+            compileJackToAsm(inputFile);
         } else {
             List<File> vmFileList = Arrays.stream(inputFile.listFiles())
                     .filter(file -> file.getName().endsWith(".jack"))
                     .collect(Collectors.toList());
             for (File f : vmFileList) {
-                compileJackToTokens(f);
+//                compileJackToTokens(f);
+                compileJackToAsm(f);
             }
         }
         System.exit(0);
+    }
+
+    private static void compileJackToAsm(File inputFile) throws IOException {
+        String filename = getNameWithoutExt(inputFile);
+        File outputFile = new File(inputFile.getAbsoluteFile().getParentFile().getAbsolutePath()
+                + "/" + filename + ".vm");
+        if (!outputFile.createNewFile()) {
+            System.out.println("Asm file already exists. Overwriting...");
+        }
+        try (FileInputStream fis = new FileInputStream(inputFile);
+             FileOutputStream fos = new FileOutputStream(outputFile);) {
+            JackTokenizer tokenizer = readInToTokenizer(fis);
+            CompileEngine engine = new CompileEngine(tokenizer.getTokens());
+            engine.compile(fos);
+
+            engine.recycleVarTable();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     private static void compileJackToTokens(File inputFile) throws IOException {
@@ -43,11 +65,9 @@ public class JackCompiler {
              FileOutputStream fos = new FileOutputStream(outputFile);) {
             JackTokenizer tokenizer = readInToTokenizer(fis);
             CompileEngine engine = new CompileEngine(tokenizer.getTokens());
-            engine.compile();
-//            writeTokensToOut(tokenizer, fos);
-            writeClassToOut(engine, fos);
-
-
+//            engine.compile();
+//            writeTokensToOut(tokenizer, fos); // tokens
+//            writeClassToOut(engine, fos); // parseTree
 
             engine.recycleVarTable();
         } catch (IOException e) {

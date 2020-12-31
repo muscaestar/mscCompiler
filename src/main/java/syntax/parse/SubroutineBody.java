@@ -1,5 +1,6 @@
 package syntax.parse;
 
+import codegen.CodeGenUtil;
 import codegen.table.VarTable;
 import syntax.parse.statement.*;
 import syntax.token.Identifier;
@@ -19,12 +20,15 @@ import java.util.ListIterator;
 public class SubroutineBody implements ParseElement {
     private final Identifier subrName;
 
+    private final Keyword subrAttr;
+
     private final List<Identifier> localVars = new LinkedList<>();
 
     private final List<JackStatement> statements = new LinkedList<>();
 
-    public SubroutineBody(Identifier subrName) {
+    public SubroutineBody(Identifier subrName, Keyword subrAttr) {
         this.subrName = subrName;
+        this.subrAttr = subrAttr;
     }
 
     public void compileSubrBody(ListIterator<JackToken> iterator) {
@@ -46,6 +50,13 @@ public class SubroutineBody implements ParseElement {
             token = iterator.next();
         }
         registerInVarTable();
+        if (subrAttr.getTkv().equals("function") ) {
+            CodeGenUtil.genFunction(subrName, VarTable.getInstance().numOfLocal());
+        } else if (subrAttr.getTkv().equals("constructor")) {
+            CodeGenUtil.genConstructor(subrName, VarTable.getInstance().numOfLocal());
+        } else if (subrAttr.getTkv().equals("method")) {
+            CodeGenUtil.genMethod(subrName, VarTable.getInstance().numOfLocal());
+        }
 
         compileStatements(iterator, token);
     }

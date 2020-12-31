@@ -1,5 +1,6 @@
 package syntax.parse.statement;
 
+import codegen.CodeGenUtil;
 import syntax.parse.expression.JackExpression;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
@@ -21,10 +22,17 @@ public class IfStatement implements JackStatement {
 
     @Override
     public JackToken compileStatement(ListIterator<JackToken> iterator) {
+        int ifCnt = CodeGenUtil.getIfLabelCnt();
+        CodeGenUtil.genComment("if " + ifCnt);
+        CodeGenUtil.ifLabelPlusOne();
         iterator.next(); // (
         condition = new JackExpression();
         condition.compileExpression(iterator, ")");
         iterator.next(); // {
+        CodeGenUtil.genExpr(condition);
+        CodeGenUtil.genIfGoto("IF_TRUE" + ifCnt);
+        CodeGenUtil.genGoto("IF_FALSE" + ifCnt);
+        CodeGenUtil.genLabel("IF_TRUE" + ifCnt);
 
         JackToken currToken = iterator.next();
         while (JackStatement.STATE_KEYWORDS_SET.contains(currToken.getTkv())) {
@@ -42,8 +50,11 @@ public class IfStatement implements JackStatement {
             currToken = s.compileStatement(iterator);
         }
 
+
         currToken = iterator.next();
         if (currToken.getTkv().equals("else")) {
+            CodeGenUtil.genGoto("IF_END" + ifCnt);
+            CodeGenUtil.genLabel("IF_FALSE" + ifCnt);
             iterator.next(); // {
             currToken = iterator.next();
             while (JackStatement.STATE_KEYWORDS_SET.contains(currToken.getTkv())) {
@@ -60,7 +71,10 @@ public class IfStatement implements JackStatement {
                 elseStatements.add(s);
                 currToken = s.compileStatement(iterator);
             }
+            CodeGenUtil.genLabel("IF_END" + ifCnt);
             currToken = iterator.next();
+        } else {
+            CodeGenUtil.genLabel("IF_FALSE" + ifCnt);
         }
 
         return currToken;

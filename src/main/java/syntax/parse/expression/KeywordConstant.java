@@ -21,6 +21,10 @@ public class KeywordConstant implements JackTerm {
         this.keyword = keyword;
     }
 
+    public Keyword getKeyword() {
+        return keyword;
+    }
+
     @Override
     public String toXmlTerm() {
         return keyword.toXml();

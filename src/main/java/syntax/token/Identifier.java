@@ -84,4 +84,8 @@ public class Identifier extends JackToken implements JackTerm {
     public String toXmlTerm() {
         return toXml();
     }
+
+    public boolean hasArrayExpr() {
+        return arrayExpr != null;
+    }
 }

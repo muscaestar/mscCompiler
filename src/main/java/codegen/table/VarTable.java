@@ -23,12 +23,20 @@ public class VarTable {
         this.localLvTable = new SymbolTable("argument", "local");
     }
 
-    public void recycleLocalLvTable() {
-        localLvTable.recycle();
+    public int numOfStatic() {
+        return classLvTable.numOfEntry("static");
     }
 
-    public void recycleClassLvTable() {
-        classLvTable.recycle();
+    public int numOfField() {
+        return classLvTable.numOfEntry("field");
+    }
+
+    public int numOfArg() {
+        return localLvTable.numOfEntry("argument");
+    }
+
+    public int numOfLocal() {
+        return localLvTable.numOfEntry("local");
     }
 
     public void add(String name, String type, String kind) {
@@ -58,6 +66,11 @@ public class VarTable {
         return localLvTable.exist(name) ? localLvTable.getKind(name) : classLvTable.getKind(name);
     }
 
+    public String getFormattedKind(String name) {
+        String kind = getKind(name);
+        return kind.equals("field") ? "this" : kind;
+    }
+
     public int getIndex(String name) {
         return localLvTable.exist(name) ? localLvTable.getIndex(name) : classLvTable.getIndex(name);
     }
@@ -69,4 +82,13 @@ public class VarTable {
     public void printClassLvTable() {
         System.out.println(classLvTable.printTable());
     }
+
+    public void recycleLocalLvTable() {
+        localLvTable.recycle();
+    }
+
+    public void recycleClassLvTable() {
+        classLvTable.recycle();
+    }
+
 }

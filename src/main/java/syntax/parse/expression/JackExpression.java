@@ -17,6 +17,13 @@ public class JackExpression implements JackTerm, ParseElement {
     private JackTerm term;
     private List<OpTerm> opTerms = new LinkedList<>();
 
+    public JackExpression() {
+    }
+
+    public JackExpression(JackTerm term) {
+        this.term = term;
+    }
+
     public void compileExpression(ListIterator<JackToken> iterator, String symbolOfEnd) {
         this.term = JackTerm.compileTerm(iterator, symbolOfEnd);
         JackToken currToken = iterator.next();

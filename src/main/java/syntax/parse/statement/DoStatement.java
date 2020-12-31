@@ -1,5 +1,6 @@
 package syntax.parse.statement;
 
+import codegen.CodeGenUtil;
 import syntax.parse.expression.SubroutineCall;
 import syntax.token.JackToken;
 import syntax.token.Keyword;
@@ -17,8 +18,10 @@ public class DoStatement implements JackStatement {
 
     @Override
     public JackToken compileStatement(ListIterator<JackToken> iterator) {
+        CodeGenUtil.genComment("do");
         subrCall = new SubroutineCall();
         subrCall.compileSubroutineCall(iterator);
+        CodeGenUtil.genPop("temp", 0);
         iterator.next();
         return iterator.next();
     }
